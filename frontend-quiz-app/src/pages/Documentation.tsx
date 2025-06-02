@@ -371,11 +371,230 @@ const Documentation = () => {
                 <BeakerIcon className="w-8 h-8 mr-3 text-primary-500" />
                 API Reference
               </h2>
-              <div className="space-y-6">
-                <p className="text-gray-300">
-                  Detailed documentation of all available API endpoints and their usage.
-                </p>
-                {/* Add more API documentation content */}
+              
+              <div className="space-y-8">
+                {/* Introduction */}
+                <div>
+                  <p className="text-gray-300 mb-6">
+                    The Movie Success Predictor API provides endpoints for movie prediction, quiz functionality,
+                    and movie data retrieval. All endpoints are RESTful and return JSON responses.
+                  </p>
+                  
+                  <div className="bg-dark-800 rounded-lg p-6 border border-dark-700 mb-8">
+                    <h3 className="text-xl font-semibold text-white mb-4">Base URL</h3>
+                    <code className="block bg-dark-900 p-3 rounded text-primary-400">
+                      http://localhost:5001/api
+                    </code>
+                  </div>
+                </div>
+
+                {/* Authentication */}
+                <div className="mb-8">
+                  <h3 className="text-2xl font-bold text-white mb-4">Authentication</h3>
+                  <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
+                    <p className="text-gray-300 mb-4">
+                      API requests require a valid TMDB API key to be included in the environment variables.
+                      Set up your authentication by creating a <code className="text-primary-400">.env</code> file:
+                    </p>
+                    <code className="block bg-dark-900 p-3 rounded text-primary-400 mb-4">
+                      TMDB_API_KEY=your_api_key_here
+                    </code>
+                    <div className="flex items-start mt-4">
+                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-yellow-500/20 p-1 mr-3">
+                        <svg className="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                      </div>
+                      <p className="text-yellow-500/90 text-sm">
+                        Never commit your API key to version control. Always use environment variables.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Endpoints */}
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-6">Endpoints</h3>
+                  
+                  {/* Get Next Movie */}
+                  <div className="mb-8">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <span className="bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm font-mono">GET</span>
+                      <code className="text-lg text-primary-400">/quiz/next-movie</code>
+                    </div>
+                    <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
+                      <p className="text-gray-300 mb-4">
+                        Retrieves the next movie for the quiz, with optional filtering by genre and certification.
+                      </p>
+                      
+                      <h4 className="text-white font-semibold mb-2">Query Parameters</h4>
+                      <div className="space-y-2 mb-4">
+                        <p className="text-gray-300"><code className="text-primary-400">genre</code> (optional) - Filter by movie genre</p>
+                        <p className="text-gray-300"><code className="text-primary-400">certification</code> (optional) - Filter by movie certification</p>
+                      </div>
+
+                      <h4 className="text-white font-semibold mb-2">Response</h4>
+                      <code className="block bg-dark-900 p-3 rounded text-primary-400 mb-4">
+{`{
+  "id": "123",
+  "title": "Movie Title",
+  "posterUrl": "/path/to/poster.jpg",
+  "year": 2023,
+  "budget": 1000000,
+  "runtime": 120,
+  "genre": "Action",
+  "certification": "PG-13"
+}`}
+                      </code>
+                    </div>
+                  </div>
+
+                  {/* Submit Guess */}
+                  <div className="mb-8">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <span className="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full text-sm font-mono">POST</span>
+                      <code className="text-lg text-primary-400">/quiz/submit-guess</code>
+                    </div>
+                    <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
+                      <p className="text-gray-300 mb-4">
+                        Submit a prediction for whether a movie will be a hit or flop.
+                      </p>
+                      
+                      <h4 className="text-white font-semibold mb-2">Request Body</h4>
+                      <code className="block bg-dark-900 p-3 rounded text-primary-400 mb-4">
+{`{
+  "movieId": "123",
+  "guess": "Hit" | "Flop"
+}`}
+                      </code>
+
+                      <h4 className="text-white font-semibold mb-2">Response</h4>
+                      <code className="block bg-dark-900 p-3 rounded text-primary-400 mb-4">
+{`{
+  "isCorrect": true,
+  "actualResult": "Hit",
+  "feedbackMessage": "Correct! This movie was indeed a hit!",
+  "confidence": 0.85
+}`}
+                      </code>
+                    </div>
+                  </div>
+
+                  {/* Get Filter Options */}
+                  <div className="mb-8">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <span className="bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm font-mono">GET</span>
+                      <code className="text-lg text-primary-400">/quiz/filter-options</code>
+                    </div>
+                    <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
+                      <p className="text-gray-300 mb-4">
+                        Retrieves available filter options for the quiz.
+                      </p>
+
+                      <h4 className="text-white font-semibold mb-2">Response</h4>
+                      <code className="block bg-dark-900 p-3 rounded text-primary-400 mb-4">
+{`{
+  "genres": ["Action", "Comedy", "Drama", ...],
+  "certifications": ["G", "PG", "PG-13", "R"],
+  "years": [1970, 1971, ..., 2023]
+}`}
+                      </code>
+                    </div>
+                  </div>
+
+                  {/* Error Handling */}
+                  <div className="mb-8">
+                    <h3 className="text-2xl font-bold text-white mb-4">Error Handling</h3>
+                    <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
+                      <p className="text-gray-300 mb-4">
+                        The API uses standard HTTP response codes and returns error messages in a consistent format:
+                      </p>
+                      <code className="block bg-dark-900 p-3 rounded text-primary-400 mb-4">
+{`{
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Human-readable error message",
+    "details": { /* Additional error details */ }
+  }
+}`}
+                      </code>
+                      
+                      <h4 className="text-white font-semibold mt-4 mb-2">Common Error Codes</h4>
+                      <div className="space-y-2">
+                        <div className="flex items-center">
+                          <span className="w-16 text-red-400">400</span>
+                          <span className="text-gray-300">Bad Request - Invalid parameters</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="w-16 text-red-400">401</span>
+                          <span className="text-gray-300">Unauthorized - Invalid or missing API key</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="w-16 text-red-400">404</span>
+                          <span className="text-gray-300">Not Found - Resource not found</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="w-16 text-red-400">429</span>
+                          <span className="text-gray-300">Too Many Requests - Rate limit exceeded</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="w-16 text-red-400">500</span>
+                          <span className="text-gray-300">Internal Server Error</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Rate Limiting */}
+                  <div className="mb-8">
+                    <h3 className="text-2xl font-bold text-white mb-4">Rate Limiting</h3>
+                    <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
+                      <p className="text-gray-300 mb-4">
+                        The API implements rate limiting to ensure fair usage:
+                      </p>
+                      <ul className="space-y-2 text-gray-300">
+                        <li>• 100 requests per minute per IP address</li>
+                        <li>• 1000 requests per hour per IP address</li>
+                      </ul>
+                      <div className="flex items-start mt-4">
+                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500/20 p-1 mr-3">
+                          <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <p className="text-blue-500/90 text-sm">
+                          Rate limit headers are included in all responses to help track your usage.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Example Usage */}
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-4">Example Usage</h3>
+                    <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
+                      <p className="text-gray-300 mb-4">Here's a complete example of using the API with fetch:</p>
+                      <code className="block bg-dark-900 p-3 rounded text-primary-400">
+{`// Get next movie with filters
+const response = await fetch('/api/quiz/next-movie?genre=Action&certification=PG-13');
+const movie = await response.json();
+
+// Submit a guess
+const result = await fetch('/api/quiz/submit-guess', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    movieId: movie.id,
+    guess: 'Hit'
+  })
+});
+const feedback = await result.json();`}
+                      </code>
+                    </div>
+                  </div>
+                </div>
               </div>
             </section>
 
@@ -385,10 +604,97 @@ const Documentation = () => {
                 Deployment
               </h2>
               <div className="space-y-6">
-                <p className="text-gray-300">
-                  Instructions for deploying the application to various platforms.
+                <p className="text-gray-300 mb-6">
+                  The Movie Success Predictor can be deployed to various platforms. Here are detailed instructions
+                  for the most common deployment options.
                 </p>
-                {/* Add deployment instructions */}
+
+                {/* Docker Deployment */}
+                <div className="bg-dark-800 rounded-lg p-6 border border-dark-700 mb-8">
+                  <h3 className="text-xl font-semibold text-white mb-4">Docker Deployment</h3>
+                  <p className="text-gray-300 mb-4">
+                    The project includes Docker configuration for containerized deployment:
+                  </p>
+                  <code className="block bg-dark-900 p-3 rounded text-primary-400 mb-4">
+{`# Build the images
+docker-compose build
+
+# Start the services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f`}
+                  </code>
+                  <div className="flex items-start mt-4">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500/20 p-1 mr-3">
+                      <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <p className="text-blue-500/90 text-sm">
+                      Make sure to set environment variables in docker-compose.yml or use a .env file
+                    </p>
+                  </div>
+                </div>
+
+                {/* Cloud Platforms */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* AWS */}
+                  <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
+                    <h3 className="text-xl font-semibold text-white mb-4">AWS Deployment</h3>
+                    <ol className="space-y-2 text-gray-300 list-decimal list-inside">
+                      <li>Create an Elastic Beanstalk application</li>
+                      <li>Configure environment variables</li>
+                      <li>Deploy using the EB CLI:</li>
+                    </ol>
+                    <code className="block bg-dark-900 p-3 rounded text-primary-400 mt-3">
+{`eb init movie-predictor
+eb create production
+eb deploy`}
+                    </code>
+                  </div>
+
+                  {/* Heroku */}
+                  <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
+                    <h3 className="text-xl font-semibold text-white mb-4">Heroku Deployment</h3>
+                    <ol className="space-y-2 text-gray-300 list-decimal list-inside">
+                      <li>Install Heroku CLI</li>
+                      <li>Login and create app</li>
+                      <li>Deploy using Git:</li>
+                    </ol>
+                    <code className="block bg-dark-900 p-3 rounded text-primary-400 mt-3">
+{`heroku login
+heroku create
+git push heroku main`}
+                    </code>
+                  </div>
+                </div>
+
+                {/* Environment Variables */}
+                <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
+                  <h3 className="text-xl font-semibold text-white mb-4">Environment Variables</h3>
+                  <p className="text-gray-300 mb-4">
+                    Required environment variables for deployment:
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex items-start">
+                      <code className="text-primary-400 w-48">TMDB_API_KEY</code>
+                      <span className="text-gray-300">Your TMDB API key</span>
+                    </div>
+                    <div className="flex items-start">
+                      <code className="text-primary-400 w-48">DATABASE_URL</code>
+                      <span className="text-gray-300">Database connection string</span>
+                    </div>
+                    <div className="flex items-start">
+                      <code className="text-primary-400 w-48">NODE_ENV</code>
+                      <span className="text-gray-300">production/development</span>
+                    </div>
+                    <div className="flex items-start">
+                      <code className="text-primary-400 w-48">PORT</code>
+                      <span className="text-gray-300">Port number (default: 5001)</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </section>
 
@@ -398,10 +704,64 @@ const Documentation = () => {
                 CLI Tools
               </h2>
               <div className="space-y-6">
-                <p className="text-gray-300">
-                  Command-line tools for data collection and model training.
+                <p className="text-gray-300 mb-6">
+                  The project includes several command-line tools for data collection, model training,
+                  and maintenance tasks.
                 </p>
-                {/* Add CLI documentation */}
+
+                {/* Data Collection */}
+                <div className="bg-dark-800 rounded-lg p-6 border border-dark-700 mb-8">
+                  <h3 className="text-xl font-semibold text-white mb-4">Data Collection</h3>
+                  <p className="text-gray-300 mb-4">
+                    Tools for collecting movie data from TMDB:
+                  </p>
+                  <code className="block bg-dark-900 p-3 rounded text-primary-400 mb-4">
+{`# Scrape movies from TMDB
+python scrape-movies.py
+
+# Process raw data
+python preprocessing.py`}
+                  </code>
+                  <p className="text-gray-300 mt-4">
+                    The scraper collects movie data from 1970 to present, including budget, revenue,
+                    and other features used for prediction.
+                  </p>
+                </div>
+
+                {/* Model Training */}
+                <div className="bg-dark-800 rounded-lg p-6 border border-dark-700 mb-8">
+                  <h3 className="text-xl font-semibold text-white mb-4">Model Training</h3>
+                  <p className="text-gray-300 mb-4">
+                    Commands for training and evaluating the ML model:
+                  </p>
+                  <code className="block bg-dark-900 p-3 rounded text-primary-400 mb-4">
+{`# Train the model
+python classification.py
+
+# Generate performance graphs
+python graph.py`}
+                  </code>
+                </div>
+
+                {/* Database Management */}
+                <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
+                  <h3 className="text-xl font-semibold text-white mb-4">Database Management</h3>
+                  <p className="text-gray-300 mb-4">
+                    Tools for managing the movie database:
+                  </p>
+                  <div className="space-y-4">
+                    <code className="block bg-dark-900 p-3 rounded text-primary-400">
+{`# Backup database
+python tools/backup_db.py
+
+# Update movie data
+python tools/update_movies.py
+
+# Clean database
+python tools/clean_db.py`}
+                    </code>
+                  </div>
+                </div>
               </div>
             </section>
 
@@ -411,10 +771,74 @@ const Documentation = () => {
                 Project Structure
               </h2>
               <div className="space-y-6">
-                <p className="text-gray-300">
-                  Overview of the project's file and directory organization.
+                <p className="text-gray-300 mb-6">
+                  The project follows a modular structure separating frontend, backend, and ML components.
                 </p>
-                {/* Add project structure documentation */}
+
+                {/* Directory Structure */}
+                <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
+                  <h3 className="text-xl font-semibold text-white mb-4">Directory Structure</h3>
+                  <code className="block bg-dark-900 p-3 rounded text-primary-400 whitespace-pre">
+{`movie-success-predictor/
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── hooks/
+│   │   └── types/
+│   ├── public/
+│   └── package.json
+├── backend/
+│   ├── app.py
+│   ├── models/
+│   ├── routes/
+│   ├── services/
+│   └── requirements.txt
+├── ml/
+│   ├── classification.py
+│   ├── preprocessing.py
+│   ├── graph.py
+│   └── models/
+├── tools/
+│   ├── scrape-movies.py
+│   └── update_movies.py
+├── data/
+│   └── moviesDb.csv
+└── docker-compose.yml`}
+                  </code>
+                </div>
+
+                {/* Key Files */}
+                <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
+                  <h3 className="text-xl font-semibold text-white mb-4">Key Files</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="text-lg font-medium text-white">Frontend</h4>
+                      <ul className="list-disc list-inside text-gray-300 ml-4">
+                        <li>components/* - Reusable UI components</li>
+                        <li>pages/* - Page components and routing</li>
+                        <li>services/* - API integration and utilities</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-medium text-white">Backend</h4>
+                      <ul className="list-disc list-inside text-gray-300 ml-4">
+                        <li>app.py - Main Flask application</li>
+                        <li>models/* - Database models</li>
+                        <li>routes/* - API endpoint definitions</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-medium text-white">ML</h4>
+                      <ul className="list-disc list-inside text-gray-300 ml-4">
+                        <li>classification.py - Model training</li>
+                        <li>preprocessing.py - Data preprocessing</li>
+                        <li>graph.py - Visualization generation</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
             </section>
 
@@ -424,10 +848,74 @@ const Documentation = () => {
                 Contributing
               </h2>
               <div className="space-y-6">
-                <p className="text-gray-300">
-                  Guidelines for contributing to the project.
+                <p className="text-gray-300 mb-6">
+                  We welcome contributions to the Movie Success Predictor project! Here's how you can help.
                 </p>
-                {/* Add contributing guidelines */}
+
+                {/* Getting Started */}
+                <div className="bg-dark-800 rounded-lg p-6 border border-dark-700 mb-8">
+                  <h3 className="text-xl font-semibold text-white mb-4">Getting Started</h3>
+                  <ol className="space-y-2 text-gray-300 list-decimal list-inside">
+                    <li>Fork the repository</li>
+                    <li>Create a feature branch</li>
+                    <li>Make your changes</li>
+                    <li>Submit a pull request</li>
+                  </ol>
+                  <code className="block bg-dark-900 p-3 rounded text-primary-400 mt-4">
+{`git clone https://github.com/your-username/movie-success-predictor.git
+cd movie-success-predictor
+git checkout -b feature/your-feature-name`}
+                  </code>
+                </div>
+
+                {/* Development Guidelines */}
+                <div className="bg-dark-800 rounded-lg p-6 border border-dark-700 mb-8">
+                  <h3 className="text-xl font-semibold text-white mb-4">Development Guidelines</h3>
+                  <ul className="space-y-3 text-gray-300">
+                    <li className="flex items-start">
+                      <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-primary-500 mt-2 mr-3" />
+                      Follow the existing code style and conventions
+                    </li>
+                    <li className="flex items-start">
+                      <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-primary-500 mt-2 mr-3" />
+                      Write clear commit messages
+                    </li>
+                    <li className="flex items-start">
+                      <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-primary-500 mt-2 mr-3" />
+                      Add tests for new features
+                    </li>
+                    <li className="flex items-start">
+                      <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-primary-500 mt-2 mr-3" />
+                      Update documentation as needed
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Code Review Process */}
+                <div className="bg-dark-800 rounded-lg p-6 border border-dark-700">
+                  <h3 className="text-xl font-semibold text-white mb-4">Code Review Process</h3>
+                  <div className="space-y-4 text-gray-300">
+                    <p>
+                      All contributions go through our code review process:
+                    </p>
+                    <ul className="space-y-2 list-disc list-inside ml-4">
+                      <li>Automated tests must pass</li>
+                      <li>Code review by at least one maintainer</li>
+                      <li>Documentation updates if applicable</li>
+                      <li>Changes must be backward compatible</li>
+                    </ul>
+                    <div className="flex items-start mt-4">
+                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-yellow-500/20 p-1 mr-3">
+                        <svg className="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                      </div>
+                      <p className="text-yellow-500/90 text-sm">
+                        Please ensure your PR description clearly explains the changes and motivation.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </section>
           </main>

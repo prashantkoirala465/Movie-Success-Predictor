@@ -115,26 +115,14 @@ const WrongGuessEffect: React.FC<{ active: boolean }> = ({ active }) => {
   if (!active) return null;
   return (
     <div 
-      className="fixed inset-0 bg-red-600/40 backdrop-blur-sm z-[1000] animate-wrongGuessFlash"
-      onAnimationEnd={(e) => {
-        // Optional: Clean up class if animation is one-shot and you want to re-trigger via class change
-        // (e.target as HTMLElement).classList.remove('animate-wrongGuessFlash'); 
+      className="fixed inset-0 bg-red-600/30 backdrop-blur-[2px] z-[1000] wrong-guess-flash"
+      style={{
+        backgroundImage: `
+          radial-gradient(circle at 20% 20%, rgba(220, 38, 38, 0.4) 0%, transparent 50%),
+          radial-gradient(circle at 80% 80%, rgba(220, 38, 38, 0.4) 0%, transparent 50%)
+        `
       }}
-    >
-      <style>
-        {`
-          @keyframes wrongGuessFlash {
-            0% { opacity: 0; transform: scale(1.05); }
-            25% { opacity: 1; transform: scale(1); }
-            75% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(1.05); }
-          }
-          .animate-wrongGuessFlash {
-            animation: wrongGuessFlash 0.7s ease-in-out forwards;
-          }
-        `}
-      </style>
-    </div>
+    />
   );
 };
 
@@ -414,17 +402,28 @@ const QuizPage: React.FC = () => {
       }
 
       if (result.isCorrect) {
+        // Correct guess effects
         setShowConfetti(true);
         if (correctSoundRef.current) {
+          correctSoundRef.current.currentTime = 0; // Reset sound to start
+          correctSoundRef.current.volume = 0.5; // Set volume to 50%
           correctSoundRef.current.play().catch(e => console.log("Error playing correct sound:", e));
         }
         setTimeout(() => setShowConfetti(false), 5000);
       } else {
+        // Wrong guess effects
         setShowWrongGuessEffect(true);
         if (wrongSoundRef.current) {
+          wrongSoundRef.current.currentTime = 0; // Reset sound to start
+          wrongSoundRef.current.volume = 0.5; // Set volume to 50%
           wrongSoundRef.current.play().catch(e => console.log("Error playing wrong sound:", e));
         }
-        setTimeout(() => setShowWrongGuessEffect(false), 1500);
+        // Add screen shake effect
+        document.body.classList.add('shake');
+        setTimeout(() => {
+          document.body.classList.remove('shake');
+          setShowWrongGuessEffect(false);
+        }, 820); // Slightly longer than the animation to ensure smooth transition
       }
 
       const nextQuestionDelay = result.isCorrect ? 4500 : 3000;
@@ -433,13 +432,11 @@ const QuizPage: React.FC = () => {
         if (selectedGameMode.totalQuestions && newQuestionsRemaining !== undefined && newQuestionsRemaining <= 0) {
           setQuizState('GAME_OVER');
           if (gameOverSoundRef.current) {
+            gameOverSoundRef.current.currentTime = 0;
+            gameOverSoundRef.current.volume = 0.5;
             gameOverSoundRef.current.play().catch(e => console.log("Error playing game over sound:", e));
           }
         } else {
-          // Reset timer for next movie
-          if (selectedGameMode.timeLimit) {
-            setTimeLeft(selectedGameMode.timeLimit);
-          }
           loadNextMovie(selectedCategories);
         }
       }, nextQuestionDelay);
@@ -1019,6 +1016,33 @@ const QuizPage: React.FC = () => {
   // PLAYING State (existing UI, slightly modified)
   return (
     <div className="min-h-screen bg-dark-900 text-white relative overflow-x-hidden pt-24">
+      {/* Audio elements */}
+      <audio src="/sounds/correct.mp3" ref={correctSoundRef} preload="auto" />
+      <audio src="/sounds/wrong.mp3" ref={wrongSoundRef} preload="auto" />
+      <audio src="/sounds/game-start.mp3" ref={gameStartSoundRef} preload="auto" />
+      <audio src="/sounds/game-over.mp3" ref={gameOverSoundRef} preload="auto" />
+
+      {/* Wrong guess effect overlay */}
+      <WrongGuessEffect active={showWrongGuessEffect} />
+
+      {/* Confetti effect */}
+      {showConfetti && (
+        <Confetti
+          width={width}
+          height={height}
+          numberOfPieces={150}
+          recycle={false}
+          gravity={0.3}
+          tweenDuration={4000}
+          onConfettiComplete={(confettiInstance: any) => {
+            setShowConfetti(false);
+            if (confettiInstance) {
+              confettiInstance.reset();
+            }
+          }}
+        />
+      )}
+
       {/* Background Elements */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary-900/30 via-dark-900 to-dark-900" />
@@ -1199,24 +1223,6 @@ const QuizPage: React.FC = () => {
           </div>
         )}
       </div>
-
-      {/* Confetti effect for correct answers */}
-      {showConfetti && (
-        <Confetti
-          width={width}
-          height={height}
-          numberOfPieces={150}
-          recycle={false}
-          gravity={0.3}
-          tweenDuration={4000}
-          onConfettiComplete={(confettiInstance: any) => {
-            setShowConfetti(false);
-            if (confettiInstance) {
-              confettiInstance.reset();
-            }
-          }}
-        />
-      )}
     </div>
   );
 };

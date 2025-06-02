@@ -2,19 +2,28 @@
 
 A sophisticated machine learning-powered web application that predicts whether a movie will be a hit or a flop. This interactive quiz game lets users test their intuition against a trained ML model while learning about the factors that contribute to a movie's success.
 
-![Movie Success Predictor](./frontend-quiz-app/src/assets/preview.png)
+<div align="center">
+  <img src="./docs/preview.png" alt="Movie Success Predictor Preview" width="800"/>
+  
+  [![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://www.python.org/)
+  [![React](https://img.shields.io/badge/React-18.0%2B-blue)](https://reactjs.org/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.0%2B-blue)](https://www.typescriptlang.org/)
+  [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+</div>
 
 ## 📚 Table of Contents
-- [Overview](#overview)
-- [Features](#features)
-- [Technical Architecture](#technical-architecture)
-- [Machine Learning Model](#machine-learning-model)
-- [Data Collection & Processing](#data-collection--processing)
-- [Installation & Setup](#installation--setup)
-- [API Reference](#api-reference)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
+- [Overview](#-overview)
+- [Features](#-features)
+- [Technical Architecture](#-technical-architecture)
+- [Machine Learning Model](#-machine-learning-model)
+- [Data Collection & Processing](#-data-collection--processing)
+- [Installation & Setup](#-installation--setup)
+- [API Reference](#-api-reference)
+- [Project Structure](#-project-structure)
+- [Contributing](#-contributing)
+- [Team](#-team)
+- [License](#-license)
+- [Acknowledgments](#-acknowledgments)
 
 ## 🌟 Overview
 
@@ -134,7 +143,7 @@ A movie is considered successful (Hit) if:
 - TMDB API Key
 
 ### Backend Setup
-\`\`\`bash
+```bash
 # Clone the repository
 git clone https://github.com/prashantkoirala465/Movie-Success-Predictor.git
 cd Movie-Success-Predictor
@@ -153,10 +162,10 @@ cp .env.example .env
 # Start the backend server
 cd backend
 python app.py
-\`\`\`
+```
 
 ### Frontend Setup
-\`\`\`bash
+```bash
 # Navigate to frontend directory
 cd frontend-quiz-app
 
@@ -165,7 +174,7 @@ npm install
 
 # Start development server
 npm run dev
-\`\`\`
+```
 
 ## 📡 API Reference
 
@@ -173,32 +182,32 @@ npm run dev
 Retrieves a random movie for prediction.
 
 Query Parameters:
-- \`genre\`: Filter by movie genre
-- \`country\`: Filter by production country
-- \`certification\`: Filter by MPAA rating
+- `genre`: Filter by movie genre
+- `country`: Filter by production country
+- `certification`: Filter by MPAA rating
 
 Response:
-\`\`\`json
+```json
 {
   "id": "string",
   "title": "string",
   "posterUrl": "string"
 }
-\`\`\`
+```
 
 ### POST /api/quiz/submit-guess
 Submit a prediction for a movie.
 
 Request Body:
-\`\`\`json
+```json
 {
   "movieId": "string",
   "guess": "Hit" | "Flop"
 }
-\`\`\`
+```
 
 Response:
-\`\`\`json
+```json
 {
   "movieId": "string",
   "userGuess": "string",
@@ -207,66 +216,82 @@ Response:
   "isCorrect": boolean,
   "feedbackMessage": "string"
 }
-\`\`\`
+```
 
 ### GET /api/quiz/filter-options
 Get available filter options.
 
 Response:
-\`\`\`json
+```json
 {
   "genres": ["string"],
   "countries": ["string"],
   "certifications": ["string"]
 }
-\`\`\`
+```
 
 ## 📁 Project Structure
 
-\`\`\`
+```plaintext
 Movie-Success-Predictor/
-├── backend/
-│   ├── app.py                 # Flask server
-│   ├── train_model.py         # Model training script
-│   ├── data/                  # Dataset storage
-│   └── models/               # Trained model files
-├── frontend-quiz-app/
+├── backend/                   # Python Flask backend
+│   ├── app.py                # Main Flask application
+│   ├── train_model.py        # Model training script
+│   ├── data/                 # Dataset storage
+│   │   └── moviesDb.csv     # Processed movie dataset
+│   └── models/              # Trained ML models
+│       ├── logistic_regression_model.joblib
+│       └── model_columns.joblib
+├── frontend-quiz-app/        # React frontend
 │   ├── src/
-│   │   ├── components/       # React components
-│   │   ├── pages/           # Page components
-│   │   ├── services/        # API services
-│   │   ├── hooks/           # Custom React hooks
-│   │   └── assets/          # Static assets
-│   └── public/              # Public assets
-├── scrape-movies.py          # Data collection script
-├── preprocessing.py          # Data preprocessing
-├── classification.py         # Model training
-└── README.md                # Project documentation
-\`\`\`
+│   │   ├── components/      # Reusable React components
+│   │   │   ├── MovieCard.tsx
+│   │   │   ├── QuizControls.tsx
+│   │   │   └── ...
+│   │   ├── pages/          # Page components
+│   │   ├── services/       # API services
+│   │   ├── hooks/         # Custom React hooks
+│   │   └── assets/        # Static assets
+│   └── public/             # Public assets
+├── data-collection/         # Data collection scripts
+│   ├── scrape-movies.py    # TMDB data scraper
+│   └── preprocessing.py    # Data preprocessing
+├── ml/                     # Machine learning
+│   └── classification.py   # Model training
+├── docs/                   # Documentation
+│   └── preview.png        # Project preview
+├── .env.example           # Example environment variables
+├── requirements.txt       # Python dependencies
+├── .gitignore            # Git ignore rules
+└── README.md             # Project documentation
+```
 
 ## 🤝 Contributing
 
 We welcome contributions! Please follow these steps:
 
 1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to your branch
-5. Open a Pull Request
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Make your changes
+4. Run tests and linting
+5. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+6. Push to the branch (`git push origin feature/AmazingFeature`)
+7. Open a Pull Request
+
+## 👥 Team
+
+- Prashant Koirala - Project Lead & Full Stack Developer
+- Aaska Koirala - Machine Learning Engineer
+- Aishmita Yonzan - UI/UX Designer
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Team
-
-- Prashant Koirala
-- Aaska Koirala
-- Aishmita Yonzan
-
 ## 🙏 Acknowledgments
 
-- TMDB API for movie data
-- Scikit-learn for ML tools
-- React and Vite communities
+- [TMDB API](https://www.themoviedb.org/documentation/api) for movie data
+- [Scikit-learn](https://scikit-learn.org/) for machine learning tools
+- [React](https://reactjs.org/) and [Vite](https://vitejs.dev/) communities
+- [Tailwind CSS](https://tailwindcss.com/) for styling
 - All contributors and testers

@@ -153,3 +153,8 @@ button:focus-visible {
   }
 }
 */
+
+/* Hide footer in quiz section */
+body.hide-footer footer {
+  display: none !important;
+}

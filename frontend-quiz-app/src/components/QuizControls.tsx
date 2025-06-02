@@ -7,12 +7,39 @@ interface QuizControlsProps {
   disabled?: boolean; // Optional: to disable buttons during loading/feedback
 }
 
+const buttonVariants = {
+  initial: { scale: 1 },
+  hover: { 
+    scale: 1.02,
+    transition: { 
+      type: "spring",
+      stiffness: 400,
+      damping: 10
+    }
+  },
+  tap: { 
+    scale: 0.98,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 10
+    }
+  },
+  disabled: {
+    scale: 1,
+    opacity: 0.5
+  }
+};
+
 const QuizControls = ({ onGuess, disabled = false }: QuizControlsProps) => {
   return (
     <div className="grid grid-cols-2 gap-4">
       <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        variants={buttonVariants}
+        initial="initial"
+        whileHover="hover"
+        whileTap="tap"
+        animate={disabled ? "disabled" : "initial"}
         onClick={() => onGuess('Hit')}
         disabled={disabled}
         className={`
@@ -20,19 +47,33 @@ const QuizControls = ({ onGuess, disabled = false }: QuizControlsProps) => {
           bg-gradient-to-br from-emerald-500 to-emerald-600
           disabled:from-emerald-500/50 disabled:to-emerald-600/50
           disabled:cursor-not-allowed
-          transition-all duration-200
+          transition-all duration-300
+          shadow-lg hover:shadow-emerald-500/25
         `}
       >
-        <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-        <div className="relative flex items-center justify-center space-x-2">
-          <TrophyIcon className="w-5 h-5" />
-          <span className="font-medium">Hit</span>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileHover={{ opacity: 1, scale: 1 }}
+          className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        />
+        <div className="relative flex items-center justify-center space-x-3">
+          <motion.div
+            initial={{ rotate: 0 }}
+            whileHover={{ rotate: 360 }}
+            transition={{ duration: 0.5 }}
+          >
+            <TrophyIcon className="w-6 h-6" />
+          </motion.div>
+          <span className="font-medium text-lg">Hit</span>
         </div>
       </motion.button>
 
       <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        variants={buttonVariants}
+        initial="initial"
+        whileHover="hover"
+        whileTap="tap"
+        animate={disabled ? "disabled" : "initial"}
         onClick={() => onGuess('Flop')}
         disabled={disabled}
         className={`
@@ -40,13 +81,24 @@ const QuizControls = ({ onGuess, disabled = false }: QuizControlsProps) => {
           bg-gradient-to-br from-rose-500 to-rose-600
           disabled:from-rose-500/50 disabled:to-rose-600/50
           disabled:cursor-not-allowed
-          transition-all duration-200
+          transition-all duration-300
+          shadow-lg hover:shadow-rose-500/25
         `}
       >
-        <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-        <div className="relative flex items-center justify-center space-x-2">
-          <XCircleIcon className="w-5 h-5" />
-          <span className="font-medium">Flop</span>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileHover={{ opacity: 1, scale: 1 }}
+          className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        />
+        <div className="relative flex items-center justify-center space-x-3">
+          <motion.div
+            initial={{ rotate: 0 }}
+            whileHover={{ rotate: 180 }}
+            transition={{ duration: 0.3 }}
+          >
+            <XCircleIcon className="w-6 h-6" />
+          </motion.div>
+          <span className="font-medium text-lg">Flop</span>
         </div>
       </motion.button>
     </div>

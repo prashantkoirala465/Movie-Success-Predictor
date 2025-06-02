@@ -96,7 +96,9 @@ def get_next_movie():
     certification_filter = request.args.get('certification') # Match query param name
 
     if genre_filter and 'genre' in filtered_df.columns:
-        filtered_df = filtered_df[filtered_df['genre'] == genre_filter]
+        # Make comparison case-insensitive and strip whitespace
+        search_genre = genre_filter.strip().lower()
+        filtered_df = filtered_df[filtered_df['genre'].str.strip().str.lower() == search_genre]
     
     if country_filter and 'country' in filtered_df.columns:
         filtered_df = filtered_df[filtered_df['country'] == country_filter]

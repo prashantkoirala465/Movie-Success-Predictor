@@ -7,6 +7,7 @@ interface FilterControlsProps {
   onFilterChange: (filterType: keyof GetMovieParams, value: string) => void;
   onApplyFilters: () => void;
   isLoading: boolean;
+  isSetupMode?: boolean;
 }
 
 const FilterControls: React.FC<FilterControlsProps> = ({
@@ -15,6 +16,7 @@ const FilterControls: React.FC<FilterControlsProps> = ({
   onFilterChange,
   onApplyFilters,
   isLoading,
+  isSetupMode = false,
 }) => {
   if (!filterOptions) {
     return <div className="my-4 text-center text-slate-400">Loading filter options...</div>;
@@ -31,8 +33,10 @@ const FilterControls: React.FC<FilterControlsProps> = ({
     'transition-colors duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed';
 
   return (
-    <div className="p-6 my-8 bg-slate-800/60 backdrop-blur-md rounded-xl shadow-2xl border border-slate-700/50 w-full max-w-lg mx-auto">
-      <h3 className="text-2xl font-semibold text-sky-300 mb-6 text-center">Filter Movies</h3>
+    <div className={`p-6 my-8 bg-dark-800/60 backdrop-blur-md rounded-xl shadow-2xl border border-slate-700/50 w-full ${isSetupMode ? 'max-w-full' : 'max-w-lg mx-auto'}`}>
+      {!isSetupMode && (
+         <h3 className="text-2xl font-semibold text-sky-300 mb-6 text-center">Filter Movies</h3>
+      )}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-6 mb-6">
         {/* Genre Filter */}
         <div>
@@ -100,19 +104,21 @@ const FilterControls: React.FC<FilterControlsProps> = ({
           </select>
         </div>
       </div>
-      <button
-        onClick={onApplyFilters}
-        disabled={isLoading}
-        className="w-full px-6 py-3 text-lg font-semibold text-white 
-                   bg-sky-600 hover:bg-sky-500 
-                   rounded-lg shadow-md hover:shadow-lg 
-                   transition-all duration-300 ease-in-out 
-                   transform focus:outline-none focus:ring-4 
-                   focus:ring-sky-400 focus:ring-opacity-60 active:scale-95 
-                   disabled:opacity-60 disabled:cursor-wait"
-      >
-        {isLoading ? 'Applying...' : 'Apply Filters & Get Movie'}
-      </button>
+      {!isSetupMode && (
+        <button
+          onClick={onApplyFilters}
+          disabled={isLoading}
+          className="w-full px-6 py-3 text-lg font-semibold text-white 
+                     bg-sky-600 hover:bg-sky-500 
+                     rounded-lg shadow-md hover:shadow-lg 
+                     transition-all duration-300 ease-in-out 
+                     transform focus:outline-none focus:ring-4 
+                     focus:ring-sky-400 focus:ring-opacity-60 active:scale-95 
+                     disabled:opacity-60 disabled:cursor-wait"
+        >
+          {isLoading ? 'Applying...' : 'Apply Filters & Get Movie'}
+        </button>
+      )}
     </div>
   );
 };

@@ -167,7 +167,7 @@ python app.py
 ### Frontend Setup
 ```bash
 # Navigate to frontend directory
-cd frontend-quiz-app
+cd frontend
 
 # Install dependencies
 npm install
@@ -242,7 +242,7 @@ Movie-Success-Predictor/
 │   └── models/              # Trained ML models
 │       ├── logistic_regression_model.joblib
 │       └── model_columns.joblib
-├── frontend-quiz-app/        # React frontend
+├── frontend/        # React frontend
 │   ├── src/
 │   │   ├── components/      # Reusable React components
 │   │   │   ├── MovieCard.tsx

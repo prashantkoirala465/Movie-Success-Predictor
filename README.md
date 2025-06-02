@@ -3,7 +3,7 @@
 A sophisticated machine learning-powered web application that predicts whether a movie will be a hit or a flop. This interactive quiz game lets users test their intuition against a trained ML model while learning about the factors that contribute to a movie's success.
 
 <div align="center">
-  <img src="./docs/preview.png" alt="Movie Success Predictor Preview" width="800"/>
+  <img src="https://github.com/user-attachments/assets/39116463-e988-4f08-9e05-3202080cd1a2" alt="Movie Success Predictor Preview" width="800"/>
   
   [![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://www.python.org/)
   [![React](https://img.shields.io/badge/React-18.0%2B-blue)](https://reactjs.org/)

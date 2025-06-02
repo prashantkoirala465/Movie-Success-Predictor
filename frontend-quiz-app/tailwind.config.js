@@ -5,36 +5,29 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    fontFamily: {
+      sans: ['Bricolage Grotesque', 'system-ui', 'sans-serif'],
+      display: ['Bricolage Grotesque', 'system-ui', 'sans-serif'],
+    },
     extend: {
-      fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Playfair Display', 'serif'],
-      },
       colors: {
-        primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
+        'dark': {
+          900: '#121212',
+          800: '#1E1E1E',
+          700: '#2D2D2D',
+          600: '#3D3D3D',
+          500: '#4D4D4D',
         },
-        dark: {
-          DEFAULT: '#111827',
-          50: '#f9fafb',
-          100: '#f3f4f6',
-          200: '#e5e7eb',
-          300: '#d1d5db',
-          400: '#9ca3af',
-          500: '#6b7280',
-          600: '#4b5563',
-          700: '#374151',
-          800: '#1f2937',
-          900: '#111827',
+        'primary': {
+          900: '#1A237E',
+          800: '#283593',
+          700: '#303F9F',
+          600: '#3949AB',
+          500: '#3F51B5',
+          400: '#5C6BC0',
+          300: '#7986CB',
+          200: '#9FA8DA',
+          100: '#C5CAE9',
         },
       },
       backgroundImage: {

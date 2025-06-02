@@ -5,15 +5,13 @@ import Footer from './components/Footer';
 import LandingPage from './pages/LandingPage';
 import QuizPage from './pages/QuizPage';
 
-// Import fonts
-import '@fontsource/inter/400.css';
-import '@fontsource/inter/500.css';
-import '@fontsource/inter/600.css';
-import '@fontsource/inter/700.css';
-import '@fontsource/playfair-display/400.css';
-import '@fontsource/playfair-display/500.css';
-import '@fontsource/playfair-display/600.css';
-import '@fontsource/playfair-display/700.css';
+// Import all weights of Bricolage Grotesque
+import '@fontsource/bricolage-grotesque/300.css';  // Light
+import '@fontsource/bricolage-grotesque/400.css';  // Regular
+import '@fontsource/bricolage-grotesque/500.css';  // Medium
+import '@fontsource/bricolage-grotesque/600.css';  // Semi-bold
+import '@fontsource/bricolage-grotesque/700.css';  // Bold
+import '@fontsource/bricolage-grotesque/800.css';  // Extra Bold
 
 const App = () => {
   // Add class to body for global styles

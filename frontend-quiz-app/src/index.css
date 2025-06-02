@@ -4,62 +4,62 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
   }
-
+  
   body {
-    @apply bg-dark-900 text-white font-sans antialiased;
+    @apply bg-dark-900 text-white antialiased;
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
   }
+}
 
-  /* Premium scrollbar styling */
-  ::-webkit-scrollbar {
-    @apply w-2;
-  }
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+}
 
-  ::-webkit-scrollbar-track {
-    @apply bg-dark-800;
-  }
+::-webkit-scrollbar-track {
+  background: theme('colors.dark.800');
+}
 
-  ::-webkit-scrollbar-thumb {
-    @apply bg-dark-600 rounded-full;
-  }
+::-webkit-scrollbar-thumb {
+  background: theme('colors.dark.600');
+  border-radius: 4px;
+}
 
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-dark-500;
-  }
+::-webkit-scrollbar-thumb:hover {
+  background: theme('colors.dark.500');
 }
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center px-6 py-3 border border-transparent 
-           text-base font-medium rounded-lg text-white 
-           bg-primary-500 hover:bg-primary-400 
-           transition-colors duration-200 
-           shadow-lg hover:shadow-primary-500/20;
+    @apply px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-500 
+           text-white font-medium rounded-lg shadow-lg 
+           hover:from-primary-700 hover:to-primary-600 
+           transition-all duration-300 ease-in-out;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center px-6 py-3 
-           border border-primary-500/20 
-           text-base font-medium rounded-lg text-white 
-           bg-transparent hover:bg-primary-500/10 
-           transition-colors duration-200;
+    @apply px-6 py-3 bg-dark-700 text-white font-medium 
+           rounded-lg shadow-lg hover:bg-dark-600 
+           transition-all duration-300 ease-in-out 
+           border border-dark-600;
   }
 
   .card {
-    @apply bg-dark-800 rounded-xl p-6 
-           shadow-lg hover:shadow-primary-500/5 
-           transition-all duration-300 
-           border border-dark-700/50;
+    @apply bg-dark-800 rounded-xl shadow-xl 
+           border border-dark-700 p-6 
+           hover:border-dark-600 transition-all 
+           duration-300 ease-in-out;
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-primary-400 to-blue-400 
-           text-transparent bg-clip-text;
+    @apply bg-clip-text text-transparent bg-gradient-to-r 
+           from-primary-400 to-primary-300 
+           font-bold;
   }
 }
 
-/* Premium animations */
 @keyframes float {
   0% {
     transform: translateY(0px);
@@ -76,11 +76,8 @@
   animation: float 3s ease-in-out infinite;
 }
 
-/* Glass morphism effect */
 .glass {
-  @apply bg-dark-800/30 backdrop-blur-lg 
-         border border-white/10 
-         shadow-xl;
+  @apply bg-dark-800/50 backdrop-blur-lg border border-dark-700/50;
 }
 
 /* Remove or comment out the old :root and body styles if desired, or keep them for base defaults */

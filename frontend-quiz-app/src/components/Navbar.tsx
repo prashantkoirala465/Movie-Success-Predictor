@@ -35,9 +35,9 @@ const Navbar = () => {
                   <motion.span
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="text-2xl font-display text-white"
+                    className="text-2xl font-bold text-white tracking-tight"
                   >
-                    MoviePredictor
+                    Movie<span className="text-primary-400">Predictor</span>
                   </motion.span>
                 </Link>
               </div>

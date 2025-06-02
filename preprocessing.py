@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-# Timothy Nguyen
 # preprocessing.py - modify movie dataset so it's suitable for classification
 
 import pandas as pd

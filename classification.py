@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-# Timothy Nguyen
 # classification.py - use several algorithms to predict movie success
 # algorithms: logistic regression, knn, decision tree, random forest
 

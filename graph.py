@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# Timothy Nguyen
 # graph.py - create graphs to visualize movie database
 
 import pandas as pd

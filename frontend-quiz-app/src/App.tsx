@@ -4,6 +4,10 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import LandingPage from './pages/LandingPage';
 import QuizPage from './pages/QuizPage';
+import Documentation from './pages/Documentation';
+import AboutPage from './pages/AboutPage';
+import FeaturesPage from './pages/FeaturesPage';
+import TeamPage from './pages/TeamPage';
 
 // Import all weights of Bricolage Grotesque
 import '@fontsource/bricolage-grotesque/300.css';  // Light
@@ -20,12 +24,16 @@ const App = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/quiz" element={<QuizPage />} />
+          <Route path="/docs" element={<Documentation />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/features" element={<FeaturesPage />} />
+          <Route path="/team" element={<TeamPage />} />
         </Routes>
       </main>
       <Footer />

@@ -277,22 +277,40 @@ const QuizPage: React.FC = () => {
 
   // Timer effect
   useEffect(() => {
+    // Clear any existing timer
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+
+    // Only start timer if we're in PLAYING state and have a time limit
     if (quizState === 'PLAYING' && selectedGameMode.timeLimit && timeLeft !== null) {
       if (timeLeft <= 0) {
         handleTimeUp();
       } else {
         timerRef.current = setInterval(() => {
-          setTimeLeft(prev => (prev !== null ? prev - 1 : null));
+          setTimeLeft(prev => {
+            if (prev === null || prev <= 0) {
+              if (timerRef.current) {
+                clearInterval(timerRef.current);
+              }
+              handleTimeUp();
+              return 0;
+            }
+            return prev - 1;
+          });
         }, 1000);
       }
-
-      return () => {
-        if (timerRef.current) {
-          clearInterval(timerRef.current);
-        }
-      };
     }
-  }, [timeLeft, quizState]);
+
+    // Cleanup function
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [timeLeft, quizState, selectedGameMode.timeLimit]);
 
   // Add this at the beginning of the component
   useEffect(() => {
@@ -342,6 +360,14 @@ const QuizPage: React.FC = () => {
     setCurrentMovie(null); // Clear current movie before loading next
     setShowConfetti(false);
     setShowWrongGuessEffect(false);
+    
+    // Reset timer for each new movie
+    if (selectedGameMode.timeLimit) {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+      setTimeLeft(selectedGameMode.timeLimit);
+    }
 
     try {
       await new Promise(resolve => setTimeout(resolve, 500)); // Simulate loading
@@ -353,7 +379,7 @@ const QuizPage: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [selectedCategories]);
+  }, [selectedCategories, selectedGameMode.timeLimit]);
 
   const handleCategoryChange = (filterType: keyof GetMovieParams, value: string) => {
     setSelectedCategories(prev => ({ ...prev, [filterType]: value || undefined }));
@@ -361,8 +387,16 @@ const QuizPage: React.FC = () => {
 
   const handleGuess = async (guess: 'Hit' | 'Flop') => {
     if (!currentMovie || quizState !== 'PLAYING') return;
+    
+    // Clear current timer
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    
     setIsLoading(true);
     setError(null);
+    
     try {
       await new Promise(resolve => setTimeout(resolve, 750));
       const result: GuessResponse = await submitGuess(currentMovie.id, guess);
@@ -376,7 +410,7 @@ const QuizPage: React.FC = () => {
       let newQuestionsRemaining = questionsRemainingRef.current;
       if (selectedGameMode.totalQuestions && newQuestionsRemaining !== undefined) {
         newQuestionsRemaining = newQuestionsRemaining - 1;
-        setQuestionsRemaining(newQuestionsRemaining); // This will trigger the useEffect to update the ref
+        setQuestionsRemaining(newQuestionsRemaining);
       }
 
       if (result.isCorrect) {
@@ -402,6 +436,10 @@ const QuizPage: React.FC = () => {
             gameOverSoundRef.current.play().catch(e => console.log("Error playing game over sound:", e));
           }
         } else {
+          // Reset timer for next movie
+          if (selectedGameMode.timeLimit) {
+            setTimeLeft(selectedGameMode.timeLimit);
+          }
           loadNextMovie(selectedCategories);
         }
       }, nextQuestionDelay);
@@ -980,66 +1018,68 @@ const QuizPage: React.FC = () => {
 
   // PLAYING State (existing UI, slightly modified)
   return (
-    <div className="min-h-screen py-20 px-4 sm:px-6 lg:px-8 relative">
-       {/* Audio elements for PLAYING state - ensure they are loaded if not already */}
-      <audio ref={correctSoundRef} src="/sounds/correct.mp3" preload="auto"></audio>
-      <audio ref={wrongSoundRef} src="/sounds/wrong.mp3" preload="auto"></audio>
-      {/* gameStart and gameOver sounds are typically played once, so might not need to be re-declared here if handled by refs */}
-
-      {/* Background gradients */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-1/2 left-1/2 transform -translate-x-1/2 w-[1000px] h-[1000px] bg-primary-500/5 rounded-full blur-3xl" />
-        <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-primary-500/5 rounded-full blur-3xl" />
+    <div className="min-h-screen bg-dark-900 text-white relative overflow-x-hidden pt-24">
+      {/* Background Elements */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary-900/30 via-dark-900 to-dark-900" />
+        <div className="absolute -top-40 -left-40 w-80 h-80 bg-primary-500/10 rounded-full filter blur-3xl animate-pulse" />
+        <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-primary-500/10 rounded-full filter blur-3xl animate-pulse delay-1000" />
       </div>
 
-      {/* Timer (only show if mode has time limit) */}
-      {selectedGameMode.timeLimit && timeLeft !== null && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50"
-        >
-          <div className={`
-            px-6 py-3 rounded-full backdrop-blur-md border
-            ${timeLeft <= 5
-              ? 'bg-rose-500/20 border-rose-500 text-rose-300'
-              : timeLeft <= 10
-              ? 'bg-amber-500/20 border-amber-500 text-amber-300'
-              : 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
-            }
-          `}>
-            <span className="font-mono text-2xl font-bold">{timeLeft}s</span>
-          </div>
-        </motion.div>
-      )}
-
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto">
-        <div className="text-center mb-12">
+      {/* Main Content Container */}
+      <div className="relative z-10 container mx-auto px-4">
+        {/* Header Section with Title and Mode */}
+        <div className="flex flex-col items-center justify-center mb-8 relative">
+          {/* Title */}
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl sm:text-5xl font-display font-bold text-white mb-4"
           >
             Movie Success Quiz
           </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-lg text-gray-300 mb-1"
-          >
-            {selectedGameMode.name}
-          </motion.p>
-          {selectedGameMode.totalQuestions && questionsRemaining !== undefined && (
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15 }}
-              className="text-md text-primary-400"
+
+          {/* Game Mode Display */}
+          {selectedGameMode && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex items-center justify-center gap-2 text-primary-400 mb-4"
             >
-              Questions Remaining: {questionsRemaining}
-            </motion.p>
+              {selectedGameMode.icon && (
+                <selectedGameMode.icon className="w-5 h-5" />
+              )}
+              <span>{selectedGameMode.name}</span>
+            </motion.div>
+          )}
+
+          {/* Timer - Now below game mode */}
+          {quizState === 'PLAYING' && selectedGameMode.timeLimit && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <div className={`
+                inline-flex items-center gap-2 px-5 py-2 rounded-lg
+                ${timeLeft && timeLeft <= 5 
+                  ? 'bg-red-500/90 shadow-sm shadow-red-500/20' 
+                  : 'bg-dark-800/90 shadow-sm shadow-primary-500/10'
+                }
+                backdrop-blur-md border border-white/10
+                transition-all duration-300
+              `}>
+                <ClockIcon className={`
+                  w-4 h-4
+                  ${timeLeft && timeLeft <= 5 ? 'animate-pulse text-red-200' : 'text-primary-400'}
+                `} />
+                <span className={`
+                  font-mono text-lg font-bold
+                  ${timeLeft && timeLeft <= 5 ? 'text-white' : 'text-primary-300'}
+                `}>
+                  {timeLeft}s
+                </span>
+              </div>
+            </motion.div>
           )}
         </div>
 
